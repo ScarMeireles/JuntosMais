@@ -1,0 +1,28 @@
+<section class="home">
+  <section class="ngos">
+    <h2>Conheça algumas ONGs</h2>
+    <div class="cards">
+      @for (ngo of ngos(); track ngo.name) {
+        <article class="card">
+          <div class="card-header">
+            <h3>{{ ngo.name }}</h3>
+            <span class="badge">{{ ngo.type }}</span>
+          </div>
+          <p class="card-description">{{ ngo.description }}</p>
+          <div class="card-actions">
+            <button type="button" class="btn-primary">Quero saber mais</button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="categories">
+    <h2>Tipos de ONGs</h2>
+    <ul class="category-list">
+      @for (cat of categories(); track cat) {
+        <li class="category-item">{{ cat }}</li>
+      }
+    </ul>
+  </section>
+</section>

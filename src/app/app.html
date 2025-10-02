@@ -1,0 +1,4 @@
+<app-header *ngIf="authService.getIsAuthenticated()"></app-header>
+<main class="main-content" [class.with-header]="authService.getIsAuthenticated()">
+  <router-outlet />
+</main>

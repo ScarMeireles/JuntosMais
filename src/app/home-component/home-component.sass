@@ -1,0 +1,149 @@
+// Estilos da Home
+.home
+  display: flex
+  flex-direction: column
+  gap: 3rem
+  padding: 3rem 1rem
+  max-width: 1200px
+  margin: 0 auto
+
+.hero
+  text-align: center
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  color: white
+  padding: 4rem 2rem
+  border-radius: 20px
+  box-shadow: var(--shadow-lg)
+  margin-bottom: 2rem
+
+  h1
+    font-size: 3.5rem
+    line-height: 1.1
+    margin: 0
+    font-weight: 700
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2)
+
+  .subtitle
+    margin-top: 1.5rem
+    font-size: 1.25rem
+    opacity: 0.95
+    max-width: 800px
+    margin-left: auto
+    margin-right: auto
+    line-height: 1.6
+
+.ngos
+  h2
+    font-size: 2rem
+    margin-bottom: 2rem
+    text-align: center
+    color: #003295
+    font-weight: 600
+
+  .cards
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+    gap: 2rem
+
+  .card
+    background: var(--bg-primary)
+    border: 1px solid var(--border)
+    border-radius: 16px
+    padding: 2rem
+    box-shadow: var(--shadow)
+    transition: all 0.3s ease
+    position: relative
+    overflow: hidden
+
+    &::before
+      content: ''
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      height: 4px
+      background: linear-gradient(90deg, var(--primary), var(--secondary))
+
+    &:hover
+      transform: translateY(-4px)
+      box-shadow: var(--shadow-lg)
+
+    .card-header
+      display: flex
+      align-items: flex-start
+      justify-content: space-between
+      gap: 1rem
+      margin-bottom: 1rem
+
+      h3
+        font-size: 1.25rem
+        margin: 0
+        color: var(--text-primary)
+        font-weight: 600
+
+      .badge
+        font-size: 0.75rem
+        background: linear-gradient(135deg, #eef2ff, #f0f4ff)
+        color: var(--primary)
+        padding: 0.5rem 1rem
+        border-radius: 20px
+        font-weight: 500
+        white-space: nowrap
+
+    .card-description
+      color: var(--text-secondary)
+      margin: 1rem 0 2rem
+      line-height: 1.6
+
+    .btn-primary
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark))
+      color: white
+      padding: 0.75rem 1.5rem
+      border-radius: 12px
+      font-weight: 500
+      font-size: 0.9rem
+      transition: all 0.3s ease
+      box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3)
+
+      &:hover
+        transform: translateY(-2px)
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)
+
+.categories
+  background: var(--bg-primary)
+  padding: 3rem 2rem
+  border-radius: 20px
+  box-shadow: var(--shadow)
+
+  h2
+    font-size: 2rem
+    margin-bottom: 2rem
+    text-align: center
+    color: var(--text-primary)
+    font-weight: 600
+
+  .category-list
+    list-style: none
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    padding: 0
+    margin: 0
+    justify-content: center
+
+  .category-item
+    background: linear-gradient(135deg, #f8fafc, #edf2f7)
+    color: var(--text-secondary)
+    padding: 0.75rem 1.5rem
+    border-radius: 25px
+    font-size: 0.9rem
+    font-weight: 500
+    border: 1px solid var(--border)
+    transition: all 0.3s ease
+
+    &:hover
+      background: linear-gradient(135deg, var(--primary), var(--secondary))
+      color: white
+      transform: translateY(-2px)
+      box-shadow: var(--shadow)
+
