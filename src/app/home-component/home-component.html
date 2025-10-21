@@ -2,15 +2,57 @@
   <section class="ngos">
     <h2>Conheça algumas ONGs</h2>
     <div class="cards">
-      @for (ngo of ngos(); track ngo.name) {
+      @for (ngo of ngos(); track ngo.id) {
         <article class="card">
           <div class="card-header">
-            <h3>{{ ngo.name }}</h3>
+            <div class="ngo-title">
+              <h3>{{ ngo.name }}</h3>
+              @if (ngo.verified) {
+                <span class="verified-badge">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                  </svg>
+                  Verificada
+                </span>
+              }
+            </div>
             <span class="badge">{{ ngo.type }}</span>
           </div>
+          
           <p class="card-description">{{ ngo.description }}</p>
+          
+          <div class="ngo-info">
+            <div class="location">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              {{ ngo.location }}
+            </div>
+            
+            <div class="rating">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
+              {{ ngo.rating }}
+            </div>
+          </div>
+          
+          <div class="donation-progress">
+            <div class="progress-info">
+              <span class="donated">R$ {{ ngo.donationsReceived.toLocaleString('pt-BR') }}</span>
+              <span class="target">de R$ {{ ngo.targetAmount.toLocaleString('pt-BR') }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="(ngo.donationsReceived / ngo.targetAmount) * 100"></div>
+            </div>
+            <div class="progress-percentage">
+              {{ Math.round((ngo.donationsReceived / ngo.targetAmount) * 100) }}% arrecadado
+            </div>
+          </div>
+          
           <div class="card-actions">
             <button type="button" class="btn-primary">Quero saber mais</button>
+            <button type="button" class="btn-secondary">Doar agora</button>
           </div>
         </article>
       }

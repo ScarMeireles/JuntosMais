@@ -75,11 +75,28 @@
       gap: 1rem
       margin-bottom: 1rem
 
-      h3
-        font-size: 1.25rem
-        margin: 0
-        color: var(--text-primary)
-        font-weight: 600
+      .ngo-title
+        display: flex
+        align-items: center
+        gap: 0.5rem
+        flex: 1
+
+        h3
+          font-size: 1.25rem
+          margin: 0
+          color: var(--text-primary)
+          font-weight: 600
+
+        .verified-badge
+          display: flex
+          align-items: center
+          gap: 0.25rem
+          background: #10b981
+          color: white
+          padding: 0.25rem 0.5rem
+          border-radius: 12px
+          font-size: 0.7rem
+          font-weight: 500
 
       .badge
         font-size: 0.75rem
@@ -92,22 +109,98 @@
 
     .card-description
       color: var(--text-secondary)
-      margin: 1rem 0 2rem
+      margin: 1rem 0 1.5rem
       line-height: 1.6
 
-    .btn-primary
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark))
-      color: white
-      padding: 0.75rem 1.5rem
-      border-radius: 12px
-      font-weight: 500
-      font-size: 0.9rem
-      transition: all 0.3s ease
-      box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3)
+    .ngo-info
+      display: flex
+      justify-content: space-between
+      align-items: center
+      margin-bottom: 1.5rem
+      padding: 1rem
+      background: #f8fafc
+      border-radius: 8px
 
-      &:hover
-        transform: translateY(-2px)
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)
+      .location, .rating
+        display: flex
+        align-items: center
+        gap: 0.5rem
+        font-size: 0.9rem
+        color: var(--text-secondary)
+
+        svg
+          color: var(--primary)
+
+    .donation-progress
+      margin-bottom: 1.5rem
+
+      .progress-info
+        display: flex
+        justify-content: space-between
+        margin-bottom: 0.5rem
+        font-size: 0.9rem
+
+        .donated
+          color: #10b981
+          font-weight: 600
+
+        .target
+          color: var(--text-secondary)
+
+      .progress-bar
+        width: 100%
+        height: 8px
+        background: #e2e8f0
+        border-radius: 4px
+        overflow: hidden
+        margin-bottom: 0.5rem
+
+        .progress-fill
+          height: 100%
+          background: linear-gradient(90deg, #10b981, #059669)
+          transition: width 0.3s ease
+
+      .progress-percentage
+        text-align: center
+        font-size: 0.8rem
+        color: var(--text-secondary)
+        font-weight: 500
+
+    .card-actions
+      display: flex
+      gap: 0.75rem
+
+      .btn-primary
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark))
+        color: white
+        padding: 0.75rem 1.5rem
+        border-radius: 12px
+        font-weight: 500
+        font-size: 0.9rem
+        transition: all 0.3s ease
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3)
+        flex: 1
+
+        &:hover
+          transform: translateY(-2px)
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)
+
+      .btn-secondary
+        background: transparent
+        color: var(--primary)
+        border: 2px solid var(--primary)
+        padding: 0.75rem 1.5rem
+        border-radius: 12px
+        font-weight: 500
+        font-size: 0.9rem
+        transition: all 0.3s ease
+        flex: 1
+
+        &:hover
+          background: var(--primary)
+          color: white
+          transform: translateY(-2px)
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2)
 
 .categories
   background: var(--bg-primary)

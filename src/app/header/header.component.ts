@@ -1,5 +1,6 @@
 import { Component, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class HeaderComponent {
   protected readonly logoPath = 'assets/images/logo.png';
   protected readonly isDropdownOpen = signal(false);
 
-  constructor(protected readonly authService: AuthService) {}
+  constructor(protected readonly authService: AuthService, private router: Router) {}
 
   protected readonly getCurrentUser = () => this.authService.getCurrentUser();
 
@@ -29,8 +30,7 @@ export class HeaderComponent {
 
   protected goToSettings(): void {
     this.isDropdownOpen.set(false);
-    // TODO: Implementar navegação para configurações
-    alert('Funcionalidade de configurações em desenvolvimento');
+    this.router.navigate(['/configuracoes']);
   }
 
   protected logout(): void {

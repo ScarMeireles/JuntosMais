@@ -1,0 +1,249 @@
+<div class="configuracoes-container">
+  <div class="configuracoes-header">
+    <button class="back-button" (click)="goBack()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Voltar
+    </button>
+    <h1 class="page-title">Configurações</h1>
+  </div>
+
+  <div class="configuracoes-content">
+    <!-- Seção de Perfil -->
+    <div class="config-section">
+      <h2 class="section-title">Perfil</h2>
+      
+      <div class="profile-info">
+        <div class="profile-image-section">
+          <div class="profile-image-container">
+            <img 
+              [src]="profileImage() || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEyIiBmaWxsPSIjRTVFN0VCIi8+PHBhdGggZD0iTTEyIDEyQzEzLjEgMTIgMTQgMTEuMSAxNCAxMEMxNCA4LjkgMTMuMSA4IDEyIDhDMTAuOSA4IDEwIDguOSAxMCAxMEMxMCAxMS4xIDEwLjkgMTIgMTIgMTJaTTEyIDE0QzkuMzMgMTQgNiAxNS4zNCA2IDE4VjIwSDE4VjE4QzE4IDE1LjY2IDE0LjY3IDE0IDEyIDE0WiIgZmlsbD0iIzlDQTNBRiIvPjwvc3ZnPg=='" 
+              alt="Foto de perfil" 
+              class="profile-image">
+            <div class="image-overlay">
+              <input 
+                type="file" 
+                id="imageUpload" 
+                accept="image/*" 
+                (change)="onImageUpload($event)"
+                class="image-input">
+              <label for="imageUpload" class="upload-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
+                </svg>
+                Alterar
+              </label>
+            </div>
+          </div>
+          <button 
+            *ngIf="profileImage()" 
+            class="remove-image-button" 
+            (click)="removeProfileImage()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="user-info">
+          <h3 class="user-name">{{ currentUser()?.username }}</h3>
+          <p class="user-email">{{ currentUser()?.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Nome de Usuário -->
+    <div class="config-section">
+      <h2 class="section-title">Nome de Usuário</h2>
+      
+      <div class="form-section">
+        <div class="current-info">
+          <label>Nome atual:</label>
+          <div class="current-value">{{ currentUser()?.username }}</div>
+        </div>
+        
+        <button 
+          class="edit-button" 
+          (click)="toggleUsernameEdit()"
+          [class.active]="isEditingUsername()">
+          {{ isEditingUsername() ? 'Cancelar' : 'Alterar Nome' }}
+        </button>
+        
+        <form 
+          *ngIf="isEditingUsername()" 
+          [formGroup]="usernameForm" 
+          (ngSubmit)="onUsernameSubmit()" 
+          class="edit-form">
+          
+          <div class="form-group">
+            <label for="newUsername">Novo nome de usuário</label>
+            <input 
+              type="text" 
+              id="newUsername"
+              formControlName="newUsername"
+              class="form-input"
+              [class.error]="usernameForm.get('newUsername')?.invalid && usernameForm.get('newUsername')?.touched"
+              placeholder="Novo nome de usuário">
+            <div class="error-message" *ngIf="usernameForm.get('newUsername')?.invalid && usernameForm.get('newUsername')?.touched">
+              <span *ngIf="usernameForm.get('newUsername')?.errors?.['required']">Nome de usuário é obrigatório</span>
+              <span *ngIf="usernameForm.get('newUsername')?.errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+            </div>
+          </div>
+
+          <button type="submit" class="save-button" [disabled]="usernameForm.invalid">
+            Salvar Nome
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Seção de Email -->
+    <div class="config-section">
+      <h2 class="section-title">Email</h2>
+      
+      <div class="form-section">
+        <div class="current-info">
+          <label>Email atual:</label>
+          <div class="current-value">{{ currentUser()?.email }}</div>
+        </div>
+        
+        <button 
+          class="edit-button" 
+          (click)="toggleEmailEdit()"
+          [class.active]="isEditingEmail()">
+          {{ isEditingEmail() ? 'Cancelar' : 'Alterar Email' }}
+        </button>
+        
+        <form 
+          *ngIf="isEditingEmail()" 
+          [formGroup]="emailForm" 
+          (ngSubmit)="onEmailSubmit()" 
+          class="edit-form">
+          
+          <div class="form-group">
+            <label for="newEmail">Novo email</label>
+            <input 
+              type="email" 
+              id="newEmail"
+              formControlName="newEmail"
+              class="form-input"
+              [class.error]="emailForm.get('newEmail')?.invalid && emailForm.get('newEmail')?.touched"
+              placeholder="novo@email.com">
+            <div class="error-message" *ngIf="emailForm.get('newEmail')?.invalid && emailForm.get('newEmail')?.touched">
+              <span *ngIf="emailForm.get('newEmail')?.errors?.['required']">Email é obrigatório</span>
+              <span *ngIf="emailForm.get('newEmail')?.errors?.['email']">Email inválido</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmEmail">Confirmar novo email</label>
+            <input 
+              type="email" 
+              id="confirmEmail"
+              formControlName="confirmEmail"
+              class="form-input"
+              [class.error]="emailForm.get('confirmEmail')?.invalid && emailForm.get('confirmEmail')?.touched"
+              placeholder="confirme@email.com">
+            <div class="error-message" *ngIf="emailForm.get('confirmEmail')?.invalid && emailForm.get('confirmEmail')?.touched">
+              <span *ngIf="emailForm.get('confirmEmail')?.errors?.['required']">Confirmação é obrigatória</span>
+              <span *ngIf="emailForm.get('confirmEmail')?.errors?.['email']">Email inválido</span>
+            </div>
+            <div class="error-message" *ngIf="emailForm.errors?.['emailMismatch'] && emailForm.get('confirmEmail')?.touched">
+              <span>Os emails não coincidem</span>
+            </div>
+          </div>
+
+          <button type="submit" class="save-button" [disabled]="emailForm.invalid">
+            Salvar Email
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Seção de Senha -->
+    <div class="config-section">
+      <h2 class="section-title">Senha</h2>
+      
+      <div class="form-section">
+        <button 
+          class="edit-button" 
+          (click)="togglePasswordEdit()"
+          [class.active]="isEditingPassword()">
+          {{ isEditingPassword() ? 'Cancelar' : 'Alterar Senha' }}
+        </button>
+        
+        <form 
+          *ngIf="isEditingPassword()" 
+          [formGroup]="passwordForm" 
+          (ngSubmit)="onPasswordSubmit()" 
+          class="edit-form">
+          
+          <div class="form-group">
+            <label for="currentPassword">Senha atual</label>
+            <input 
+              type="password" 
+              id="currentPassword"
+              formControlName="currentPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
+              placeholder="Digite sua senha atual">
+            <div class="error-message" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+              <span *ngIf="passwordForm.get('currentPassword')?.errors?.['required']">Senha atual é obrigatória</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Nova senha</label>
+            <input 
+              type="password" 
+              id="newPassword"
+              formControlName="newPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+              placeholder="Digite sua nova senha">
+            <div class="error-message" *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+              <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">Nova senha é obrigatória</span>
+              <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar nova senha</label>
+            <input 
+              type="password" 
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
+              placeholder="Confirme sua nova senha">
+            <div class="error-message" *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+              <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Confirmação é obrigatória</span>
+            </div>
+            <div class="error-message" *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
+              <span>As senhas não coincidem</span>
+            </div>
+          </div>
+
+          <button type="submit" class="save-button" [disabled]="passwordForm.invalid">
+            Salvar Senha
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Seção de Logout -->
+    <div class="config-section danger-section">
+      <h2 class="section-title">Conta</h2>
+      
+      <div class="danger-actions">
+        <button class="logout-button" (click)="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z"/>
+          </svg>
+          Sair da Conta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -61,6 +61,15 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
+  updateUser(updatedUser: User): void {
+    this.currentUser.set(updatedUser);
+    
+    // Atualizar dados no localStorage (apenas no cliente)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('userData', JSON.stringify(updatedUser));
+    }
+  }
+
   register(email: string, username: string, cpf: string, password: string): boolean {
     // Simular registro - em produção, isso seria uma chamada para API
     if (email && username && cpf && password) {
