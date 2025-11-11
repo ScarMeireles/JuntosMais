@@ -13,14 +13,9 @@ import { AuthService } from '../auth.service';
 })
 export class ConfiguracoesComponent {
   protected readonly currentUser = signal<any>(null);
-  protected readonly isEditingEmail = signal(false);
-  protected readonly isEditingPassword = signal(false);
-  protected readonly isEditingUsername = signal(false);
   protected readonly profileImage = signal<string | null>(null);
   
-  protected emailForm: FormGroup;
-  protected passwordForm: FormGroup;
-  protected usernameForm: FormGroup;
+  protected settingsForm: FormGroup;
 
   constructor(
     private fb: FormBuilder, 
@@ -30,108 +25,83 @@ export class ConfiguracoesComponent {
     // Inicializar currentUser após a injeção do authService
     this.currentUser.set(this.authService.getCurrentUser());
     
-    this.emailForm = this.fb.group({
-      currentEmail: [{ value: this.currentUser()?.email || '', disabled: true }],
-      newEmail: ['', [Validators.required, Validators.email]],
-      confirmEmail: ['', [Validators.required, Validators.email]]
-    }, { validators: this.emailMatchValidator });
-
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+    this.settingsForm = this.fb.group({
+      nome: [this.currentUser()?.username || '', [Validators.required, Validators.minLength(3)]],
+      email: [this.currentUser()?.email || '', [Validators.required, Validators.email]],
+      senhaAtual: [''],
+      novaSenha: [''],
+      confirmarSenha: ['']
     }, { validators: this.passwordMatchValidator });
 
-    this.usernameForm = this.fb.group({
-      currentUsername: [{ value: this.currentUser()?.username || '', disabled: true }],
-      newUsername: ['', [Validators.required, Validators.minLength(3)]]
+    // Adicionar listeners para validar dinamicamente os campos de senha
+    this.settingsForm.get('senhaAtual')?.valueChanges.subscribe(() => {
+      this.settingsForm.updateValueAndValidity();
+    });
+    this.settingsForm.get('novaSenha')?.valueChanges.subscribe(() => {
+      this.settingsForm.updateValueAndValidity();
+    });
+    this.settingsForm.get('confirmarSenha')?.valueChanges.subscribe(() => {
+      this.settingsForm.updateValueAndValidity();
     });
 
     // Carregar foto de perfil salva
     this.loadProfileImage();
   }
 
-  protected toggleEmailEdit(): void {
-    this.isEditingEmail.update(edit => !edit);
-    if (!this.isEditingEmail()) {
-      this.emailForm.reset();
-      this.emailForm.patchValue({
-        currentEmail: this.currentUser()?.email || ''
-      });
-    }
-  }
-
-  protected togglePasswordEdit(): void {
-    this.isEditingPassword.update(edit => !edit);
-    if (!this.isEditingPassword()) {
-      this.passwordForm.reset();
-    }
-  }
-
-  protected toggleUsernameEdit(): void {
-    this.isEditingUsername.update(edit => !edit);
-    if (!this.isEditingUsername()) {
-      this.usernameForm.reset();
-      this.usernameForm.patchValue({
-        currentUsername: this.currentUser()?.username || ''
-      });
-    }
-  }
-
-  protected onEmailSubmit(): void {
-    if (this.emailForm.valid) {
-      const { newEmail } = this.emailForm.value;
+  protected onSubmit(): void {
+    if (this.settingsForm.valid) {
+      const { nome, email, senhaAtual, novaSenha } = this.settingsForm.value;
+      const trimmedSenhaAtual = (senhaAtual || '').trim();
+      const trimmedNovaSenha = (novaSenha || '').trim();
+      const messages: string[] = [];
       
-      // Simular atualização de email
-      if (this.updateUserEmail(newEmail)) {
-        alert('Email atualizado com sucesso!');
-        this.toggleEmailEdit();
-        this.emailForm.reset();
-        this.emailForm.patchValue({
-          currentEmail: newEmail
-        });
+      // Atualizar nome se foi alterado
+      if (nome && nome.trim() !== this.currentUser()?.username) {
+        if (this.updateUserUsername(nome.trim())) {
+          messages.push('Nome atualizado com sucesso');
+        } else {
+          alert('Erro ao atualizar nome. Tente novamente.');
+          return;
+        }
+      }
+      
+      // Atualizar email se foi alterado
+      if (email && email.trim() !== this.currentUser()?.email) {
+        if (this.updateUserEmail(email.trim())) {
+          messages.push('Email atualizado com sucesso');
+        } else {
+          alert('Erro ao atualizar email. Tente novamente.');
+          return;
+        }
+      }
+      
+      // Atualizar senha se foi preenchida
+      if (trimmedSenhaAtual && trimmedNovaSenha) {
+        if (this.updateUserPassword(trimmedSenhaAtual, trimmedNovaSenha)) {
+          messages.push('Senha atualizada com sucesso');
+          // Limpar campos de senha após sucesso
+          this.settingsForm.patchValue({
+            senhaAtual: '',
+            novaSenha: '',
+            confirmarSenha: ''
+          });
+          // Forçar validação para limpar erros
+          this.settingsForm.updateValueAndValidity();
+        } else {
+          alert('Senha atual incorreta ou erro ao atualizar senha.');
+          return;
+        }
+      }
+      
+      if (messages.length > 0) {
+        alert(messages.join('\n'));
       } else {
-        alert('Erro ao atualizar email. Tente novamente.');
+        // Nenhuma alteração foi feita
+        alert('Nenhuma alteração foi realizada.');
       }
     } else {
-      this.markFormGroupTouched(this.emailForm);
-    }
-  }
-
-  protected onPasswordSubmit(): void {
-    if (this.passwordForm.valid) {
-      const { currentPassword, newPassword } = this.passwordForm.value;
-      
-      // Simular atualização de senha
-      if (this.updateUserPassword(currentPassword, newPassword)) {
-        alert('Senha atualizada com sucesso!');
-        this.togglePasswordEdit();
-        this.passwordForm.reset();
-      } else {
-        alert('Senha atual incorreta ou erro ao atualizar. Tente novamente.');
-      }
-    } else {
-      this.markFormGroupTouched(this.passwordForm);
-    }
-  }
-
-  protected onUsernameSubmit(): void {
-    if (this.usernameForm.valid) {
-      const { newUsername } = this.usernameForm.value;
-      
-      // Simular atualização de username
-      if (this.updateUserUsername(newUsername)) {
-        alert('Nome de usuário atualizado com sucesso!');
-        this.toggleUsernameEdit();
-        this.usernameForm.reset();
-        this.usernameForm.patchValue({
-          currentUsername: newUsername
-        });
-      } else {
-        alert('Erro ao atualizar nome de usuário. Tente novamente.');
-      }
-    } else {
-      this.markFormGroupTouched(this.usernameForm);
+      this.markFormGroupTouched(this.settingsForm);
+      alert('Por favor, corrija os erros no formulário antes de salvar.');
     }
   }
 
@@ -214,20 +184,83 @@ export class ConfiguracoesComponent {
     return false;
   }
 
-  private emailMatchValidator(formGroup: FormGroup): { [key: string]: any } | null {
-    const newEmail = formGroup.get('newEmail');
-    const confirmEmail = formGroup.get('confirmEmail');
-    return newEmail && confirmEmail && newEmail.value !== confirmEmail.value
-      ? { emailMismatch: true }
-      : null;
-  }
-
   private passwordMatchValidator(formGroup: FormGroup): { [key: string]: any } | null {
-    const newPassword = formGroup.get('newPassword');
-    const confirmPassword = formGroup.get('confirmPassword');
-    return newPassword && confirmPassword && newPassword.value !== confirmPassword.value
-      ? { passwordMismatch: true }
-      : null;
+    const novaSenha = formGroup.get('novaSenha');
+    const confirmarSenha = formGroup.get('confirmarSenha');
+    const senhaAtual = formGroup.get('senhaAtual');
+    
+    if (!novaSenha || !confirmarSenha || !senhaAtual) {
+      return null;
+    }
+    
+    const novaSenhaValue = (novaSenha.value || '').trim();
+    const confirmarSenhaValue = (confirmarSenha.value || '').trim();
+    const senhaAtualValue = (senhaAtual.value || '').trim();
+    
+    // Se todos os campos de senha estão vazios, senha é opcional - limpar erros
+    if (!novaSenhaValue && !confirmarSenhaValue && !senhaAtualValue) {
+      // Limpar erros de senha se todos os campos estiverem vazios
+      if (senhaAtual.errors) {
+        const { required, ...otherErrors } = senhaAtual.errors;
+        senhaAtual.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+      }
+      if (novaSenha.errors) {
+        const { required, minlength, ...otherErrors } = novaSenha.errors;
+        novaSenha.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+      }
+      if (confirmarSenha.errors) {
+        const { required, ...otherErrors } = confirmarSenha.errors;
+        confirmarSenha.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+      }
+      return null;
+    }
+    
+    // Se qualquer campo de senha estiver preenchido, verificar se todos estão preenchidos e válidos
+    let hasError = false;
+    
+    // Verificar se senha atual está preenchida
+    if (!senhaAtualValue && (novaSenhaValue || confirmarSenhaValue)) {
+      if (!senhaAtual.errors || !senhaAtual.errors['required']) {
+        senhaAtual.setErrors({ ...(senhaAtual.errors || {}), required: true });
+      }
+      hasError = true;
+    } else if (senhaAtualValue && senhaAtual.errors?.['required']) {
+      const { required, ...otherErrors } = senhaAtual.errors;
+      senhaAtual.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+    }
+    
+    // Verificar se nova senha está preenchida e tem tamanho mínimo
+    if (!novaSenhaValue && (senhaAtualValue || confirmarSenhaValue)) {
+      if (!novaSenha.errors || !novaSenha.errors['required']) {
+        novaSenha.setErrors({ ...(novaSenha.errors || {}), required: true });
+      }
+      hasError = true;
+    } else if (novaSenhaValue) {
+      if (novaSenhaValue.length < 6) {
+        novaSenha.setErrors({ ...(novaSenha.errors || {}), minlength: { requiredLength: 6, actualLength: novaSenhaValue.length } });
+        hasError = true;
+      } else {
+        const { required, minlength, ...otherErrors } = novaSenha.errors || {};
+        novaSenha.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+      }
+    }
+    
+    // Verificar se confirmação de senha está preenchida e coincide
+    if (!confirmarSenhaValue && (senhaAtualValue || novaSenhaValue)) {
+      if (!confirmarSenha.errors || !confirmarSenha.errors['required']) {
+        confirmarSenha.setErrors({ ...(confirmarSenha.errors || {}), required: true });
+      }
+      hasError = true;
+    } else if (confirmarSenhaValue && novaSenhaValue && novaSenhaValue !== confirmarSenhaValue) {
+      // Senhas não coincidem
+      return { passwordMismatch: true };
+    } else if (confirmarSenhaValue && novaSenhaValue && novaSenhaValue === confirmarSenhaValue) {
+      // Senhas coincidem, limpar erro de required se existir
+      const { required, ...otherErrors } = confirmarSenha.errors || {};
+      confirmarSenha.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+    }
+    
+    return hasError ? { passwordFieldsIncomplete: true } : null;
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
