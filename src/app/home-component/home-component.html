@@ -1,6 +1,39 @@
 <section class="home">
   <section class="ngos">
     <h2>Conheça algumas ONGs</h2>
+    
+    <!-- Filtros por Tipo -->
+    <div class="filters-section">
+      <h3 class="filters-title">Filtrar por tipo:</h3>
+      <div class="filters-list">
+        <button 
+          class="filter-button" 
+          [class.active]="selectedFilter() === null"
+          (click)="selectFilter(null)">
+          Todos
+        </button>
+        @for (type of ngoTypes(); track type) {
+          <button 
+            class="filter-button" 
+            [class.active]="selectedFilter() === type"
+            (click)="selectFilter(type)">
+            {{ type }}
+          </button>
+        }
+      </div>
+      @if (selectedFilter()) {
+        <div class="filter-info">
+          <span>Mostrando {{ ngos().length }} ONG(s) do tipo: <strong>{{ selectedFilter() }}</strong></span>
+          <button class="clear-filter" (click)="selectFilter(null)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+            Limpar filtro
+          </button>
+        </div>
+      }
+    </div>
+    
     <div class="cards">
       @for (ngo of ngos(); track ngo.id) {
         <article class="card">
@@ -57,14 +90,5 @@
         </article>
       }
     </div>
-  </section>
-
-  <section class="categories">
-    <h2>Tipos de ONGs</h2>
-    <ul class="category-list">
-      @for (cat of categories(); track cat) {
-        <li class="category-item">{{ cat }}</li>
-      }
-    </ul>
   </section>
 </section>
