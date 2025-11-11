@@ -7,6 +7,55 @@
   max-width: 1200px
   margin: 0 auto
 
+// Banner de Doação
+.donation-banner
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  border-radius: 20px
+  padding: 3rem 2rem
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3)
+  text-align: center
+  color: white
+
+  .banner-content
+    max-width: 600px
+    margin: 0 auto
+
+  .banner-title
+    font-size: 2.5rem
+    font-weight: 700
+    margin: 0 0 1rem 0
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+
+  .banner-description
+    font-size: 1.2rem
+    margin: 0 0 2rem 0
+    opacity: 0.95
+    line-height: 1.6
+    color: white
+
+  .donation-button
+    display: inline-flex
+    align-items: center
+    gap: 10px
+    background: white
+    color: #667eea
+    border: none
+    padding: 16px 32px
+    border-radius: 12px
+    font-size: 1.1rem
+    font-weight: 600
+    cursor: pointer
+    transition: all 0.3s ease
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2)
+
+    &:hover
+      transform: translateY(-3px)
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3)
+
+    svg
+      width: 20px
+      height: 20px
+
 .hero
   text-align: center
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
@@ -323,6 +372,19 @@
 
 // Responsividade
 @media (max-width: 768px)
+  .donation-banner
+    padding: 2rem 1.5rem
+
+    .banner-title
+      font-size: 2rem
+
+    .banner-description
+      font-size: 1rem
+
+    .donation-button
+      padding: 14px 24px
+      font-size: 1rem
+
   .ngos
     .filters-section
       padding: 1rem

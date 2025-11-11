@@ -1,5 +1,6 @@
 import { Component, signal, computed, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 export interface NGO {
   id: number;
@@ -43,10 +44,20 @@ export class HomeComponent implements OnInit {
     return this.allNGOs().filter(ngo => ngo.type === filter);
   });
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.loadNGOs();
+  }
+
+  protected goToDonation(ngo?: NGO): void {
+    // Passar dados da ONG e valor sugerido via state
+    this.router.navigate(['/doacao'], {
+      state: {
+        ngo: ngo,
+        amount: ngo ? '' : '' // Valor vazio para o usuário preencher
+      }
+    });
   }
 
   private loadNGOs(): void {

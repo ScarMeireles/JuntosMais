@@ -1,0 +1,392 @@
+.donation-container
+  min-height: 100vh
+  background: #f8fafc
+  padding: 20px
+
+.donation-header
+  max-width: 800px
+  margin: 0 auto 30px auto
+  display: flex
+  align-items: center
+  gap: 20px
+
+.back-button
+  display: flex
+  align-items: center
+  gap: 8px
+  background: white
+  border: 1px solid #e2e8f0
+  border-radius: 8px
+  padding: 10px 16px
+  color: #4a5568
+  cursor: pointer
+  transition: all 0.3s ease
+  font-size: 0.9rem
+
+  &:hover
+    background: #f7fafc
+    border-color: #cbd5e0
+
+.page-title
+  font-size: 2rem
+  font-weight: 700
+  color: #2d3748
+  margin: 0
+
+.donation-content
+  max-width: 800px
+  margin: 0 auto
+
+.donation-form-section, .qr-code-section
+  animation: fadeIn 0.5s ease-in
+
+@keyframes fadeIn
+  from
+    opacity: 0
+    transform: translateY(20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.form-card, .qr-card
+  background: white
+  border-radius: 16px
+  padding: 40px
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1)
+
+.section-title
+  font-size: 1.75rem
+  font-weight: 600
+  color: #2d3748
+  margin: 0 0 10px 0
+
+.section-description
+  color: #718096
+  font-size: 1rem
+  margin: 0 0 30px 0
+  line-height: 1.6
+
+.selected-ngo-info
+  margin-bottom: 20px
+
+  .ngo-badge
+    display: flex
+    align-items: center
+    gap: 10px
+    background: #f0f4ff
+    border: 2px solid #667eea
+    border-radius: 12px
+    padding: 16px 20px
+    color: #667eea
+
+    svg
+      flex-shrink: 0
+
+    span
+      font-size: 1rem
+
+    strong
+      font-weight: 600
+      color: #2d3748
+
+.donation-form
+  .form-group
+    margin-bottom: 24px
+
+    label
+      display: block
+      margin-bottom: 8px
+      font-weight: 600
+      color: #4a5568
+      font-size: 0.9rem
+
+    .form-input
+      width: 100%
+      padding: 14px 16px
+      border: 2px solid #e2e8f0
+      border-radius: 8px
+      font-size: 1rem
+      transition: all 0.3s ease
+      box-sizing: border-box
+      font-family: inherit
+
+      &:focus
+        outline: none
+        border-color: #667eea
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)
+
+      &.error
+        border-color: #e53e3e
+
+      &::placeholder
+        color: #a0aec0
+
+    .form-textarea
+      resize: vertical
+      min-height: 100px
+
+    .error-message
+      margin-top: 6px
+      font-size: 0.875rem
+      color: #e53e3e
+
+  // Seção de Endereço
+  .address-section
+    margin-top: 30px
+    padding-top: 30px
+    border-top: 2px solid #e2e8f0
+
+    .address-section-title
+      font-size: 1.25rem
+      font-weight: 600
+      color: #2d3748
+      margin: 0 0 20px 0
+
+  .form-row
+    display: grid
+    grid-template-columns: 1fr
+    gap: 16px
+    margin-bottom: 24px
+
+    @media (min-width: 768px)
+      grid-template-columns: repeat(2, 1fr)
+
+  .form-group-large
+    @media (min-width: 768px)
+      grid-column: span 1
+
+  .form-group-medium
+    // Tamanho padrão, não precisa de ajuste
+
+  .form-group-small
+    @media (min-width: 768px)
+      max-width: 150px
+
+.submit-button
+  width: 100%
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  color: white
+  border: none
+  padding: 16px
+  border-radius: 8px
+  font-size: 1.1rem
+  font-weight: 600
+  cursor: pointer
+  transition: all 0.3s ease
+  margin-top: 10px
+
+  &:hover:not(:disabled)
+    transform: translateY(-2px)
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3)
+
+  &:disabled
+    opacity: 0.6
+    cursor: not-allowed
+    transform: none
+
+// QR Code Styles
+.qr-code-container
+  text-align: center
+
+.qr-code-wrapper
+  display: inline-block
+  padding: 20px
+  background: white
+  border-radius: 12px
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
+  margin-bottom: 30px
+
+.qr-code-mock
+  width: 300px
+  height: 300px
+  background: white
+  border: 2px solid #e2e8f0
+  border-radius: 8px
+  position: relative
+  overflow: hidden
+
+.qr-pattern
+  width: 100%
+  height: 100%
+  position: relative
+
+.qr-square
+  position: absolute
+  width: 60px
+  height: 60px
+  border: 4px solid #000
+  background: #000
+
+  &.top-left
+    top: 10px
+    left: 10px
+
+  &.top-right
+    top: 10px
+    right: 10px
+
+  &.bottom-left
+    bottom: 10px
+    left: 10px
+
+  &::before
+    content: ''
+    position: absolute
+    width: 40px
+    height: 40px
+    background: white
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    border: 2px solid #000
+
+.qr-grid
+  position: absolute
+  top: 80px
+  left: 80px
+  right: 80px
+  bottom: 80px
+  display: flex
+  flex-direction: column
+  gap: 2px
+
+.qr-row
+  display: flex
+  gap: 2px
+  flex: 1
+
+.qr-cell
+  flex: 1
+  background: white
+  border-radius: 1px
+
+  &.filled
+    background: #000
+
+.qr-info
+  background: #f7fafc
+  border-radius: 12px
+  padding: 20px
+  margin-bottom: 30px
+  text-align: left
+
+  .info-item
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 12px 0
+    border-bottom: 1px solid #e2e8f0
+
+    &:last-child
+      border-bottom: none
+
+    .info-label
+      font-weight: 600
+      color: #4a5568
+      font-size: 0.9rem
+      width: 300px
+
+    .info-value
+      color: #2d3748
+      font-size: 0.95rem
+      word-break: break-all
+      text-align: right
+      margin-left: 10px
+
+.qr-actions
+  display: flex
+  gap: 12px
+  margin-bottom: 30px
+
+  .action-button
+    flex: 1
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 8px
+    padding: 14px 20px
+    border-radius: 8px
+    font-weight: 600
+    font-size: 1rem
+    cursor: pointer
+    transition: all 0.3s ease
+    border: none
+
+    &.primary
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+      color: white
+
+      &:hover
+        transform: translateY(-2px)
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3)
+
+    &.secondary
+      background: white
+      color: #667eea
+      border: 2px solid #667eea
+
+      &:hover
+        background: #f7fafc
+        transform: translateY(-2px)
+
+.success-message
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 12px
+  padding: 20px
+  background: #f0fdf4
+  border: 2px solid #10b981
+  border-radius: 12px
+  color: #065f46
+
+  svg
+    color: #10b981
+    flex-shrink: 0
+
+  p
+    margin: 0
+    font-weight: 500
+    font-size: 1rem
+
+// Responsividade
+@media (max-width: 768px)
+  .donation-container
+    padding: 10px
+
+  .donation-header
+    margin-bottom: 20px
+
+  .form-card, .qr-card
+    padding: 25px 20px
+
+  .page-title
+    font-size: 1.5rem
+
+  .qr-code-mock
+    width: 250px
+    height: 250px
+
+  .qr-actions
+    flex-direction: column
+
+    .action-button
+      width: 100%
+
+  .success-message
+    flex-direction: column
+    text-align: center
+
+    p
+      font-size: 0.9rem
+
+@media print
+  .donation-header,
+  .qr-actions,
+  .back-button
+    display: none
+
+  .qr-card
+    box-shadow: none
+    border: 1px solid #e2e8f0
+
