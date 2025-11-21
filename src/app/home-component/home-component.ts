@@ -1,21 +1,6 @@
 import { Component, signal, computed, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
-export interface NGO {
-  id: number;
-  name: string;
-  type: string;
-  description: string;
-  location: string;
-  website?: string;
-  phone?: string;
-  email?: string;
-  verified: boolean;
-  rating: number;
-  donationsReceived: number;
-  targetAmount: number;
-}
+import { NgosService, NGO } from '../ngos.service';
 
 @Component({
   selector: 'app-home-component',
@@ -44,7 +29,7 @@ export class HomeComponent implements OnInit {
     return this.allNGOs().filter(ngo => ngo.type === filter);
   });
   
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private ngosService: NgosService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadNGOs();
@@ -61,7 +46,7 @@ export class HomeComponent implements OnInit {
   }
 
   private loadNGOs(): void {
-    this.http.get<NGO[]>('assets/data/ongs.json').subscribe({
+    this.ngosService.getNGOs().subscribe({
       next: (data) => {
         this.allNGOs.set(data);
       },

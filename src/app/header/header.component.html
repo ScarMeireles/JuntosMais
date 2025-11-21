@@ -16,6 +16,12 @@
     </div>
     
     <div class="header-right">
+      <button class="add-ong-button" (click)="goToAddONG()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+        <span>Adicionar ONG</span>
+      </button>
       <div class="user-dropdown" [class.open]="isDropdownOpen()">
         <button class="user-button" (click)="toggleDropdown()">
           <div class="user-icon">

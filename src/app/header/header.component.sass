@@ -24,6 +24,7 @@
 .header-right
   display: flex
   align-items: center
+  gap: 12px
 
 .logo
   img
@@ -56,6 +57,33 @@
     color: #000259
   p
     color: #e7e7e7
+
+// Add ONG Button
+.add-ong-button
+  display: flex
+  align-items: center
+  gap: 8px
+  background: rgba(255, 255, 255, 0.2)
+  border: 1px solid rgba(255, 255, 255, 0.3)
+  border-radius: 8px
+  padding: 8px 16px
+  color: white
+  cursor: pointer
+  transition: all 0.3s ease
+  font-size: 0.9rem
+  font-weight: 500
+
+  &:hover
+    background: rgba(255, 255, 255, 0.3)
+    border-color: rgba(255, 255, 255, 0.4)
+    transform: translateY(-1px)
+
+  svg
+    flex-shrink: 0
+
+  @media (max-width: 768px)
+    span
+      display: none
 
 // User Dropdown Styles
 .user-dropdown

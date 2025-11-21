@@ -1,0 +1,174 @@
+.add-ong-container
+  min-height: calc(100vh - 80px)
+  padding: 2rem 1rem
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)
+
+.form-wrapper
+  max-width: 800px
+  margin: 0 auto
+  background: white
+  border-radius: 12px
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1)
+  padding: 2rem
+  animation: fadeIn 0.3s ease-in
+
+@keyframes fadeIn
+  from
+    opacity: 0
+    transform: translateY(-10px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.form-header
+  margin-bottom: 2rem
+  text-align: center
+  border-bottom: 2px solid #e2e8f0
+  padding-bottom: 1.5rem
+
+  h1
+    font-size: 2rem
+    font-weight: 700
+    color: #2d3748
+    margin: 0 0 0.5rem 0
+
+  p
+    color: #718096
+    font-size: 1rem
+    margin: 0
+
+.alert
+  display: flex
+  align-items: center
+  gap: 10px
+  padding: 1rem
+  border-radius: 8px
+  margin-bottom: 1.5rem
+  font-size: 0.9rem
+
+  svg
+    flex-shrink: 0
+
+.alert-error
+  background-color: #fed7d7
+  color: #c53030
+  border: 1px solid #fc8181
+
+.alert-success
+  background-color: #c6f6d5
+  color: #22543d
+  border: 1px solid #68d391
+
+.form-group
+  margin-bottom: 1.5rem
+
+  label
+    display: block
+    font-weight: 600
+    color: #2d3748
+    margin-bottom: 0.5rem
+    font-size: 0.95rem
+
+    .required
+      color: #e53e3e
+
+  input[type="text"],
+  input[type="url"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea
+    width: 100%
+    padding: 0.75rem
+    border: 2px solid #e2e8f0
+    border-radius: 8px
+    font-size: 1rem
+    transition: all 0.3s ease
+    font-family: inherit
+
+    &:focus
+      outline: none
+      border-color: #667eea
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)
+
+    &:disabled
+      background-color: #f7fafc
+      cursor: not-allowed
+
+  textarea
+    resize: vertical
+    min-height: 100px
+
+.form-row
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 1rem
+
+  @media (max-width: 768px)
+    grid-template-columns: 1fr
+
+.form-actions
+  display: flex
+  gap: 1rem
+  justify-content: flex-end
+  margin-top: 2rem
+  padding-top: 1.5rem
+  border-top: 2px solid #e2e8f0
+
+  @media (max-width: 768px)
+    flex-direction: column-reverse
+
+.btn-primary,
+.btn-secondary
+  padding: 0.75rem 2rem
+  border: none
+  border-radius: 8px
+  font-size: 1rem
+  font-weight: 600
+  cursor: pointer
+  transition: all 0.3s ease
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 0.5rem
+
+  &:disabled
+    opacity: 0.6
+    cursor: not-allowed
+
+.btn-primary
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  color: white
+
+  &:hover:not(:disabled)
+    transform: translateY(-2px)
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)
+
+.btn-secondary
+  background: #e2e8f0
+  color: #2d3748
+
+  &:hover:not(:disabled)
+    background: #cbd5e0
+
+.spinner
+  width: 16px
+  height: 16px
+  border: 2px solid rgba(255, 255, 255, 0.3)
+  border-top-color: white
+  border-radius: 50%
+  animation: spin 0.6s linear infinite
+
+@keyframes spin
+  to
+    transform: rotate(360deg)
+
+// Responsividade
+@media (max-width: 768px)
+  .form-wrapper
+    padding: 1.5rem
+
+  .form-header h1
+    font-size: 1.5rem
+

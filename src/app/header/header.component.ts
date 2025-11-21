@@ -33,6 +33,10 @@ export class HeaderComponent {
     this.router.navigate(['/configuracoes']);
   }
 
+  protected goToAddONG(): void {
+    this.router.navigate(['/adicionar-ong']);
+  }
+
   protected logout(): void {
     this.isDropdownOpen.set(false);
     this.authService.logout();
