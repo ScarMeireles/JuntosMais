@@ -1,6 +1,6 @@
 <section class="home">
-  <section class="ngos">
-    <h2>Conheça algumas ONGs</h2>
+  <section class="campanhas">
+    <h2>Conheça algumas Campanhas</h2>
     
     <!-- Filtros por Tipo -->
     <div class="filters-section">
@@ -12,7 +12,7 @@
           (click)="selectFilter(null)">
           Todos
         </button>
-        @for (type of ngoTypes(); track type) {
+        @for (type of campanhaTypes(); track type) {
           <button 
             class="filter-button" 
             [class.active]="selectedFilter() === type"
@@ -23,7 +23,7 @@
       </div>
       @if (selectedFilter()) {
         <div class="filter-info">
-          <span>Mostrando {{ ngos().length }} ONG(s) do tipo: <strong>{{ selectedFilter() }}</strong></span>
+          <span>Mostrando {{ campanhas().length }} Campanha(s) do tipo: <strong>{{ selectedFilter() }}</strong></span>
           <button class="clear-filter" (click)="selectFilter(null)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -35,12 +35,12 @@
     </div>
     
     <div class="cards">
-      @for (ngo of ngos(); track ngo.id) {
+      @for (campanha of campanhas(); track campanha.id) {
         <article class="card">
           <div class="card-header">
-            <div class="ngo-title">
-              <h3>{{ ngo.name }}</h3>
-              @if (ngo.verified) {
+            <div class="campanha-title">
+              <h3>{{ campanha.name }}</h3>
+              @if (campanha.verified) {
                 <span class="verified-badge">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
@@ -49,43 +49,43 @@
                 </span>
               }
             </div>
-            <span class="badge">{{ ngo.type }}</span>
+            <span class="badge">{{ campanha.type }}</span>
           </div>
           
-          <p class="card-description">{{ ngo.description }}</p>
+          <p class="card-description">{{ campanha.description }}</p>
           
-          <div class="ngo-info">
+          <div class="campanha-info">
             <div class="location">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
               </svg>
-              {{ ngo.location }}
+              {{ campanha.location }}
             </div>
             
             <div class="rating">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
               </svg>
-              {{ ngo.rating }}
+              {{ campanha.rating }}
             </div>
           </div>
           
           <div class="donation-progress">
             <div class="progress-info">
-              <span class="donated">R$ {{ ngo.donationsReceived.toLocaleString('pt-BR') }}</span>
-              <span class="target">de R$ {{ ngo.targetAmount.toLocaleString('pt-BR') }}</span>
+              <span class="donated">R$ {{ (campanha.donationsReceived ?? 0).toLocaleString('pt-BR') }}</span>
+              <span class="target">de R$ {{ campanha.targetAmount.toLocaleString('pt-BR') }}</span>
             </div>
             <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="(ngo.donationsReceived / ngo.targetAmount) * 100"></div>
+              <div class="progress-fill" [style.width.%]="getProgressPercentage(campanha)"></div>
             </div>
             <div class="progress-percentage">
-              {{ Math.round((ngo.donationsReceived / ngo.targetAmount) * 100) }}% arrecadado
+              {{ Math.round(getProgressPercentage(campanha)) }}% arrecadado
             </div>
           </div>
           
           <div class="card-actions">
-            <button type="button" class="btn-primary">Quero saber mais</button>
-            <button type="button" class="btn-secondary" (click)="goToDonation(ngo)">Doar agora</button>
+            <button type="button" class="btn-primary" (click)="viewDetails(campanha.id)">Quero saber mais</button>
+            <button type="button" class="btn-secondary" (click)="goToDonation(campanha)">Doar agora</button>
           </div>
         </article>
       }

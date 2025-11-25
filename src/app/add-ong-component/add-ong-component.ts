@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgosService, NGO } from '../ngos.service';
+import { CampanhasService, Campanha } from '../campanhas.service';
 
 @Component({
   selector: 'app-add-ong-component',
@@ -12,12 +12,12 @@ import { NgosService, NGO } from '../ngos.service';
   styleUrl: './add-ong-component.sass'
 })
 export class AddOngComponent implements OnInit {
-  protected readonly ngoTypes = signal<string[]>([]);
+  protected readonly campanhaTypes = signal<string[]>([]);
   protected readonly isLoading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly successMessage = signal<string | null>(null);
 
-  protected formData: Partial<NGO> = {
+  protected formData: Partial<Campanha> = {
     name: '',
     type: '',
     description: '',
@@ -28,31 +28,20 @@ export class AddOngComponent implements OnInit {
     verified: false,
     rating: 0,
     donationsReceived: 0,
-    targetAmount: 0
+    targetAmount: 0,
+    data_fim: undefined
   };
 
   constructor(
-    private ngosService: NgosService,
+    private campanhasService: CampanhasService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadNGOTypes();
-  }
 
-  private loadNGOTypes(): void {
-    this.ngosService.getNGOTypes().subscribe({
-      next: (types) => {
-        this.ngoTypes.set(types);
-      },
-      error: (error) => {
-        console.error('Erro ao carregar tipos de ONGs:', error);
-      }
-    });
   }
 
   protected onSubmit(): void {
-    // Validação básica
     if (!this.formData.name || !this.formData.type || !this.formData.description || 
         !this.formData.location || !this.formData.targetAmount || this.formData.targetAmount <= 0) {
       this.errorMessage.set('Por favor, preencha todos os campos obrigatórios.');
@@ -60,7 +49,6 @@ export class AddOngComponent implements OnInit {
       return;
     }
 
-    // Validação de email se fornecido
     if (this.formData.email && !this.isValidEmail(this.formData.email)) {
       this.errorMessage.set('Por favor, insira um email válido.');
       this.successMessage.set(null);
@@ -71,7 +59,7 @@ export class AddOngComponent implements OnInit {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    const newNGO: Omit<NGO, 'id'> = {
+    const newCampanha: Omit<Campanha, 'id'> = {
       name: this.formData.name!,
       type: this.formData.type!,
       description: this.formData.description!,
@@ -79,18 +67,18 @@ export class AddOngComponent implements OnInit {
       website: this.formData.website || undefined,
       phone: this.formData.phone || undefined,
       email: this.formData.email || undefined,
-      verified: false, // Novas ONGs começam como não verificadas
-      rating: 0, // Novas ONGs começam com rating 0
-      donationsReceived: 0, // Novas ONGs começam sem doações
-      targetAmount: this.formData.targetAmount!
+      verified: false,
+      rating: 0,
+      donationsReceived: 0,
+      targetAmount: this.formData.targetAmount!,
+      data_fim: this.formData.data_fim || undefined
     };
 
-    this.ngosService.addNGO(newNGO).subscribe({
-      next: (ngo) => {
+    this.campanhasService.addCampanha(newCampanha).subscribe({
+      next: (campanha) => {
         this.isLoading.set(false);
-        this.successMessage.set(`ONG "${ngo.name}" adicionada com sucesso!`);
+        this.successMessage.set(`Campanha "${campanha.name}" adicionada com sucesso!`);
         
-        // Limpar formulário após sucesso
         setTimeout(() => {
           this.resetForm();
           this.router.navigate(['/home']);
@@ -98,8 +86,8 @@ export class AddOngComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading.set(false);
-        this.errorMessage.set('Erro ao adicionar ONG. Por favor, tente novamente.');
-        console.error('Erro ao adicionar ONG:', error);
+        this.errorMessage.set('Erro ao adicionar campanha. Por favor, tente novamente.');
+        console.error('Erro ao adicionar campanha:', error);
       }
     });
   }
@@ -116,7 +104,8 @@ export class AddOngComponent implements OnInit {
       verified: false,
       rating: 0,
       donationsReceived: 0,
-      targetAmount: 0
+      targetAmount: 0,
+      data_fim: undefined
     };
     this.errorMessage.set(null);
     this.successMessage.set(null);
@@ -131,4 +120,3 @@ export class AddOngComponent implements OnInit {
     return emailRegex.test(email);
   }
 }
-
