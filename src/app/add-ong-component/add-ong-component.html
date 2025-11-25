@@ -37,19 +37,16 @@
       </div>
 
       <div class="form-group">
-        <label for="type">Tipo/Categoria <span class="required">*</span></label>
-        <select
-          id="type"
-          name="type"
-          [(ngModel)]="formData.type"
-          required
-        >
-          <option value="">Selecione um tipo</option>
-          @for (type of ngoTypes(); track type) {
-            <option [value]="type">{{ type }}</option>
-          }
-        </select>
-      </div>
+      <label for="type">Tipo/Categoria <span class="required">*</span></label>
+      <input
+        type="text"
+        id="type"
+        name="type"
+        [(ngModel)]="formData.type"
+        required
+        placeholder="Ex: Educação, Saúde, Meio Ambiente..."
+      />
+    </div>
 
       <div class="form-group">
         <label for="description">Descrição <span class="required">*</span></label>
@@ -125,6 +122,17 @@
           placeholder="contato@exemplo.org.br"
         />
       </div>
+
+      <div class="form-group">
+      <label for="data_fim">Data de Término (Opcional)</label>
+      <input
+        type="datetime-local"
+        id="data_fim"
+        name="data_fim"
+        [(ngModel)]="formData.data_fim"
+        placeholder="Selecione a data de término"
+      />
+    </div>
 
       <div class="form-actions">
         <button type="button" class="btn-secondary" (click)="goBack()" [disabled]="isLoading()">

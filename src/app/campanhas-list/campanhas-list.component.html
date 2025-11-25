@@ -1,0 +1,86 @@
+<div class="campanhas-container">
+  <div class="campanhas-header">
+    <h1>Conheça algumas ONGs</h1>
+    <p>Apoie causas que fazem diferença</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="filters">
+    <p>Filtrar por tipo:</p>
+    <div class="filter-buttons">
+      @for (type of getUniqueTypes(); track type) {
+        <button 
+          class="filter-btn"
+          [class.active]="selectedFilter() === type"
+          (click)="filterByType(type)"
+        >
+          {{ type }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">
+      <p>Carregando campanhas...</p>
+    </div>
+  }
+
+  @if (!isLoading() && getFilteredCampanhas().length === 0) {
+    <div class="no-campanhas">
+      <p>Nenhuma campanha encontrada</p>
+    </div>
+  }
+
+  @if (!isLoading() && getFilteredCampanhas().length > 0) {
+    <div class="campanhas-grid">
+      @for (campanha of getFilteredCampanhas(); track campanha.id) {
+        <div class="campanha-card">
+          <div class="card-header">
+            <h3>{{ campanha.name }}</h3>
+            @if (campanha.verified) {
+              <span class="badge verified">✓ Verificada</span>
+            }
+          </div>
+
+          <p class="card-type">{{ campanha.type }}</p>
+          <p class="card-description">{{ campanha.description }}</p>
+
+          <div class="card-info">
+            <div class="location">
+              <span>📍 {{ campanha.location }}</span>
+            </div>
+            <div class="rating">
+              <span>⭐ {{ campanha.rating }}</span>
+            </div>
+          </div>
+
+          <div class="progress-section">
+            <div class="progress-info">
+              <span>R$ {{ campanha.donationsReceived | number: '1.2-2' }}</span>
+              <span>de R$ {{ campanha.targetAmount | number: '1.2-2' }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getProgressPercentage(campanha)"></div>
+            </div>
+            <p class="progress-percent">{{ getProgressPercentage(campanha) | number: '1.0-0' }}% arrecadado</p>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-info" (click)="viewDetails(campanha.id)">
+              Quero saber mais
+            </button>
+            <button class="donate-button" (click)="doarAgora(campanha)">
+                Doar agora
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

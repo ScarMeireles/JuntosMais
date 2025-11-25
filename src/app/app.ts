@@ -8,10 +8,10 @@ import { AuthService } from './auth.service';
   selector: 'app-root',
   imports: [RouterOutlet, CommonModule, HeaderComponent],
   templateUrl: './app.html',
-  styleUrl: './app.sass'
+  styleUrls: ['./app.sass']
 })
 export class App {
   protected readonly title = signal('JuntosMais');
-  
+
   constructor(protected readonly authService: AuthService) {}
 }

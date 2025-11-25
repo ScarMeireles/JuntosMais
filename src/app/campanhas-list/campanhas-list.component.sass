@@ -1,0 +1,185 @@
+.campanhas-container
+  max-width: 1200px
+  margin: 0 auto
+  padding: 40px 20px
+
+.campanhas-header
+  text-align: center
+  margin-bottom: 40px
+
+  h1
+    font-size: 2.5rem
+    color: #2d3748
+    margin-bottom: 10px
+
+  p
+    color: #718096
+    font-size: 1.1rem
+
+.filters
+  margin-bottom: 40px
+
+  p
+    font-weight: 600
+    color: #2d3748
+    margin-bottom: 15px
+
+  .filter-buttons
+    display: flex
+    flex-wrap: wrap
+    gap: 10px
+
+    .filter-btn
+      padding: 10px 20px
+      border: 2px solid #e2e8f0
+      background: white
+      border-radius: 20px
+      cursor: pointer
+      transition: all 0.3s ease
+      font-weight: 500
+      color: #4a5568
+
+      &:hover
+        border-color: #667eea
+
+      &.active
+        background: #667eea
+        color: white
+        border-color: #667eea
+
+.campanhas-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+  gap: 30px
+  margin-top: 30px
+
+.campanha-card
+  background: white
+  border: 1px solid #e2e8f0
+  border-radius: 12px
+  padding: 25px
+  transition: all 0.3s ease
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+
+  &:hover
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12)
+    transform: translateY(-4px)
+
+  .card-header
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+    margin-bottom: 15px
+
+    h3
+      font-size: 1.3rem
+      color: #2d3748
+      margin: 0
+
+    .badge
+      padding: 4px 12px
+      border-radius: 20px
+      font-size: 0.8rem
+      font-weight: 600
+
+      &.verified
+        background: #c6f6d5
+        color: #22543d
+
+  .card-type
+    color: #667eea
+    font-size: 0.9rem
+    font-weight: 600
+    margin: 0 0 10px 0
+
+  .card-description
+    color: #4a5568
+    font-size: 0.95rem
+    line-height: 1.5
+    margin-bottom: 15px
+
+  .card-info
+    display: flex
+    justify-content: space-between
+    margin-bottom: 20px
+    padding-bottom: 15px
+    border-bottom: 1px solid #e2e8f0
+
+    span
+      color: #718096
+      font-size: 0.9rem
+
+  .progress-section
+    margin-bottom: 20px
+
+    .progress-info
+      display: flex
+      justify-content: space-between
+      margin-bottom: 8px
+      font-size: 0.9rem
+      color: #4a5568
+
+    .progress-bar
+      height: 8px
+      background: #e2e8f0
+      border-radius: 4px
+      overflow: hidden
+
+      .progress-fill
+        height: 100%
+        background: linear-gradient(90deg, #48bb78, #38a169)
+        transition: width 0.3s ease
+
+    .progress-percent
+      margin-top: 5px
+      font-size: 0.85rem
+      color: #718096
+
+  .card-actions
+    display: flex
+    gap: 10px
+
+    .btn-info,
+    .btn-donate
+      flex: 1
+      padding: 12px
+      border: none
+      border-radius: 8px
+      font-weight: 600
+      cursor: pointer
+      transition: all 0.3s ease
+      font-size: 0.95rem
+
+    .btn-info
+      background: #667eea
+      color: white
+
+      &:hover
+        background: #5a67d8
+
+    .btn-donate
+      background: white
+      color: #667eea
+      border: 2px solid #667eea
+
+      &:hover
+        background: #f7fafc
+
+.loading,
+.no-campanhas
+  text-align: center
+  padding: 40px
+  color: #718096
+
+@media (max-width: 768px)
+  .campanhas-grid
+    grid-template-columns: 1fr
+
+  .campanhas-header h1
+    font-size: 2rem
+
+  .filters .filter-buttons
+    flex-direction: column
+
+    .filter-btn
+      width: 100%

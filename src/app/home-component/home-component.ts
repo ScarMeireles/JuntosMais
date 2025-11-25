@@ -1,78 +1,89 @@
 import { Component, signal, computed, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgosService, NGO } from '../ngos.service';
+import { CommonModule } from '@angular/common';
+import { CampanhasService, Campanha } from '../campanhas.service';
 
 @Component({
   selector: 'app-home-component',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './home-component.html',
   styleUrl: './home-component.sass'
 })
 export class HomeComponent implements OnInit {
   protected readonly Math = Math;
-  protected readonly allNGOs = signal<NGO[]>([]);
+  protected readonly allCampanhas = signal<Campanha[]>([]);
   protected readonly selectedFilter = signal<string | null>(null);
+  protected readonly isLoading = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
   
-  // Extrair types únicos das ONGs
-  protected readonly ngoTypes = computed(() => {
-    const types = this.allNGOs().map(ngo => ngo.type);
-    return Array.from(new Set(types)).sort();
+  // Extrair types únicos das campanhas
+  protected readonly campanhaTypes = computed(() => {
+    const types = this.allCampanhas().map(campanha => campanha.type);
+    return ['Todos', ...Array.from(new Set(types)).sort()];
   });
   
-  // Filtrar ONGs baseado no filtro selecionado
-  protected readonly ngos = computed(() => {
+  // Filtrar campanhas baseado no filtro selecionado
+  protected readonly campanhas = computed(() => {
     const filter = this.selectedFilter();
-    if (!filter) {
-      return this.allNGOs();
+    if (!filter || filter === 'Todos') {
+      return this.allCampanhas();
     }
-    return this.allNGOs().filter(ngo => ngo.type === filter);
+    return this.allCampanhas().filter(campanha => campanha.type === filter);
   });
-  
-  constructor(private ngosService: NgosService, private router: Router) {}
+
+  // Calcular progresso da campanha
+protected getProgressPercentage(campanha: Campanha): number {
+  if (!campanha.targetAmount || campanha.targetAmount <= 0) return 0;
+  const donated = campanha.donationsReceived ?? 0; // Adicionar esta linha
+  return Math.min((donated / campanha.targetAmount) * 100, 100);
+}
+  constructor(private campanhasService: CampanhasService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadNGOs();
+    this.loadCampanhas();
   }
 
-  protected goToDonation(ngo?: NGO): void {
-    // Passar dados da ONG e valor sugerido via state
-    this.router.navigate(['/doacao'], {
-      state: {
-        ngo: ngo,
-        amount: ngo ? '' : '' // Valor vazio para o usuário preencher
-      }
-    });
+  protected goToDonation(campanha?: Campanha): void {
+    if (campanha?.id) {
+      this.router.navigate(['/doacao'], {
+        state: {
+          campanha: campanha,
+          amount: ''
+        }
+      });
+    }
   }
 
-  private loadNGOs(): void {
-    this.ngosService.getNGOs().subscribe({
+  protected viewDetails(campanhaId?: number): void {
+    if (campanhaId) {
+      this.router.navigate(['/campanha', campanhaId]);
+    }
+  }
+
+  private loadCampanhas(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.campanhasService.getCampanhas().subscribe({
       next: (data) => {
-        this.allNGOs.set(data);
+        this.allCampanhas.set(data);
+        this.isLoading.set(false);
       },
       error: (error) => {
-        console.error('Erro ao carregar ONGs:', error);
-        this.allNGOs.set([]);
+        console.error('Erro ao carregar campanhas:', error);
+        this.errorMessage.set('Erro ao carregar campanhas. Tente novamente.');
+        this.allCampanhas.set([]);
+        this.isLoading.set(false);
       }
     });
   }
 
   protected selectFilter(type: string | null): void {
     if (this.selectedFilter() === type) {
-      // Se o filtro já está selecionado, deseleciona (mostra todos)
       this.selectedFilter.set(null);
     } else {
-      // Seleciona o novo filtro
       this.selectedFilter.set(type);
     }
   }
-
-  protected readonly categories = signal([
-    'Cuidado com animais de rua',
-    'Crianças carentes/orfãs',
-    'Moradores de rua',
-    'Tratamento de doenças sem cura',
-    'Educação e inclusão digital',
-    'Meio ambiente e sustentabilidade'
-  ]);
 }
