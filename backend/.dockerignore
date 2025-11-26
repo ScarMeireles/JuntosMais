@@ -1,0 +1,42 @@
+# backend/.dockerignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Poetry
+.venv/
+venv/
+ENV/
+env/
+
+# Testes
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Ambiente
+.env
+.env.local
+
+# Banco de dados local
+*.db
+*.sqlite3

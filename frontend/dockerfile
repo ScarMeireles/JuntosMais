@@ -1,0 +1,31 @@
+FROM node:24 AS build
+WORKDIR /src
+COPY . ./
+RUN npm install
+RUN npm install -g @angular/cli
+RUN ng build 
+
+
+FROM nginx:stable AS final
+
+# Remove o config padrão
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copia o seu config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Limpa a pasta padrão
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copia os arquivos do build (da pasta browser)
+COPY --from=build /src/dist/JuntosMais/browser /usr/share/nginx/html
+
+# --- A CORREÇÃO MÁGICA AQUI ---
+# Renomeia o index.csr.html para index.html para o Nginx reconhecer
+RUN mv /usr/share/nginx/html/index.csr.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+

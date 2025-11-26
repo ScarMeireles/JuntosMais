@@ -1,0 +1,27 @@
+services:
+  # Serviço do Angular + Nginx
+  frontend:
+    build:
+      context: ./frontend # Aponta para a pasta do Angular
+      dockerfile: Dockerfile
+    container_name: angular_app
+    ports:
+      - "80:80" # Acessar no navegador via http://localhost
+    restart: always
+    depends_on:
+      - backend
+
+  # Serviço do FastAPI
+  backend:
+    build:
+      context: ./backend # Aponta para a pasta do FastAPI
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000" # Acessível externamente para o Front bater
+    env_file:
+      - .env # Lê as credenciais do arquivo .env
+    # Se preferir colocar direto aqui (não recomendado para senhas):
+    # environment:
+    #   - DATABASE_URL=postgresql://user:pass@host.render.com/db
+    restart: always

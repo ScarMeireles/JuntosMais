@@ -9,9 +9,8 @@ export const routes: Routes = [
   { path: '', component: AuthComponent },
   { path: 'home', component: HomeComponent },
   { path: 'configuracoes', component: ConfiguracoesComponent },
-  // 🚨 LINHA ESSENCIALMENTE CORRIGIDA: Espera o parâmetro 'campanhaId'
   { path: 'doacao/:campanhaId', component: DonationComponent }, 
-  { path: 'doacao', component: DonationComponent }, // Fallback opcional
+  { path: 'doacao', component: DonationComponent }, 
   { path: 'adicionar-ong', component: AddOngComponent },
   { path: '**', redirectTo: '' }
 ];

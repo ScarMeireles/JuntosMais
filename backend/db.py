@@ -1,8 +1,9 @@
 from databases import Database
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
-DATABASE_URL = "postgresql+psycopg2://juntos_mais_user:EPZ4r8ULpWXRaxS22joMpt1tJJilWg89@dpg-d4c0lt0gjchc73d2cvf0-a.oregon-postgres.render.com/juntos_mais" 
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 database = Database(DATABASE_URL)
 
