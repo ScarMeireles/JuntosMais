@@ -239,9 +239,7 @@ export class AuthComponent implements OnInit {
     
     if (this.registerForm.invalid) {
       console.log('⚠️ Formulário inválido');
-      Object.keys(this.registerForm.controls).forEach(key => {
-        this.registerForm.get(key)?.markAsTouched();
-      });
+      this.registerForm.markAllAsTouched();
       return;
     }
 
@@ -249,7 +247,7 @@ export class AuthComponent implements OnInit {
     this.isLoading.set(true);
 
     const registerData = {
-      name: this.registerForm.value.username,
+      username: this.registerForm.value.username,
       cpf: this.registerForm.value.cpf.replace(/\D/g, ''),
       email: this.registerForm.value.email,
       password: this.registerForm.value.password

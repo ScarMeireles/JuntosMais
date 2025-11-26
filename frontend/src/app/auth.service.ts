@@ -106,25 +106,38 @@ export class AuthService {
     this.isLoading.set(true);
     
     const url = `${this.base}/register`;
+
+    // --- CORREÇÃO AQUI ---
+    // Mapeamos os dados do formulário para o formato exato que o FastAPI exige
+    const payload = {
+      username: userData.username || userData.name, // Se o form usar 'name', converte para 'username'
+      email: userData.email,
+      password: userData.password,
+      // Dica: Se o CPF vier com pontos e traços, é bom limpar (se o back esperar só numeros)
+      // Se o back aceitar com formatação, use apenas: cpf: userData.cpf
+      cpf: userData.cpf ? userData.cpf.replace(/\D/g, '') : '' 
+    };
+
     console.log('===== 📝 DEBUG REGISTER =====');
     console.log('URL Completa:', url);
-    console.log('User Data:', userData);
+    console.log('Dados originais:', userData);
+    console.log('Payload FORMATADO para o FastAPI:', payload); // Verifique isso no console
     console.log('============================');
     
-    return this.http.post<AuthResponse>(url, userData).pipe(
+    // Note que agora enviamos 'payload' em vez de 'userData'
+    return this.http.post<AuthResponse>(url, payload).pipe(
       tap({
         next: (response) => {
           console.log('✅ Registro bem sucedido!');
-          console.log('Response:', response);
           this.handleLoginSuccess(response);
           this.isLoading.set(false);
         },
         error: (error) => {
           console.error('===== ❌ ERRO NO REGISTRO =====');
-          console.error('Status:', error.status);
-          console.error('URL tentada:', error.url);
-          console.error('Error completo:', error);
-          console.error('================================');
+          // Isso vai te mostrar exatamente qual campo o FastAPI rejeitou
+          if (error.status === 422) {
+             console.error('⚠️ ERRO DE VALIDAÇÃO (422):', error.error.detail);
+          }
           this.isLoading.set(false);
           throw error;
         }
