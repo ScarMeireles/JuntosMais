@@ -36,7 +36,7 @@ export class AuthComponent implements OnInit {
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = '/api';
 
   constructor(
     private router: Router,
