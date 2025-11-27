@@ -134,7 +134,7 @@ async def get_user_profile(user_id: int):
         "cpf": user.cpf
     }
 
-@app.post("/campanhas/", response_model=CampanhaResponse, status_code=201)
+@app.post("/campanhas", response_model=CampanhaResponse, status_code=201)
 async def criar_campanha(campanha: CampanhaCreate):
     """Cria uma nova campanha de doação"""
     query = campanhas.insert().values(
@@ -161,7 +161,7 @@ async def criar_campanha(campanha: CampanhaCreate):
     
     return {**dict(db_campanha), "percentual_atingido": percentual}
 
-@app.get("/campanhas/", response_model=List[CampanhaResponse])
+@app.get("/campanhas", response_model=List[CampanhaResponse])
 async def listar_campanhas(ativas: Optional[bool] = True, limit: int = 100):
     """Lista todas as campanhas (ativas por padrão)"""
     query = campanhas.select().limit(limit).order_by(campanhas.c.data_inicio.desc())
